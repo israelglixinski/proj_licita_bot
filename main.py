@@ -4,7 +4,7 @@ import db_mongo
 
 
 
-def alimentador_mongo():
+def alimentador_bruto_mongo():
     lista_ModalidadeContratacao = [
         # [1, "Leilão - Eletrônico"],
         # [2, "Diálogo Competitivo"],
@@ -69,8 +69,11 @@ def alimentador_mongo():
             pass
         pass
 
+def alimentador_final_mongo():
+    pass
+
 
 
 if __name__ == '__main__':
-    alimentador_mongo()
+    alimentador_bruto_mongo()
     pass
