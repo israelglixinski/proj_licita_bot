@@ -56,10 +56,10 @@ def alimentador_mongo():
                 api.pagina = pagina_atual
                 consulta_in_loop = api.consulta_contratacoes_puplicacao()
                 agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                print('\n\n')
+                # print('\n\n')
                 print(f"{agora} - Página {pagina_atual} de {totalPaginas} ")
                 for registro in consulta_in_loop['data']:
-                    print(".", end="")
+                    # print(".", end="")
                     # print(registro)
                     db_mongo.pncp_bruto.insert_one(registro)
                     pass
@@ -72,5 +72,5 @@ def alimentador_mongo():
 
 
 if __name__ == '__main__':
-    
+    alimentador_mongo()
     pass
