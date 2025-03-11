@@ -70,10 +70,21 @@ def alimentador_bruto_mongo():
         pass
 
 def alimentador_final_mongo():
+    consulta = db_mongo.sintetiza_bruto()
+    for registro in consulta:
+        registro['interesse'] = 'Não Avaliado'
+        registro['anotacao'] = 'Sem Anotações'
+        
+        db_mongo.pncp_final.insert_one(registro)
+
+        # print('\n')
+        # print(registro)
+        # print('\n')    
     pass
 
 
 
 if __name__ == '__main__':
-    alimentador_bruto_mongo()
+    # alimentador_bruto_mongo()
+    alimentador_final_mongo()
     pass

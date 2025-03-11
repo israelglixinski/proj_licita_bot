@@ -81,7 +81,6 @@ def sintetiza_bruto():
 
 if __name__ == "__main__":
     consulta = sintetiza_bruto()
-    print(consulta)
     for registro in consulta:
         print('\n')
         print(registro)
