@@ -7,7 +7,7 @@ import os
 
 # Conexão com o Mongo
 load_dotenv()
-mongopass = os.getenv("mongopass")
+mongopass = os.getenv("MONGO_PASS")
 client = MongoClient(f"mongodb+srv://israelglixinski:{mongopass}@cluster0.kzkzrs2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client["licitacao"]
 pncp_bruto = db["pncp_bruto"]
