@@ -1,7 +1,65 @@
-from datetime import datetime
 import font_api
+from datetime import datetime, timedelta
 import db_mongo
 
+def analise_dia_a_dia():
+    api = font_api.Pncp()
+    api.pagina = 1
+    api.codigoModalidadeContratacao = 1
+
+    loop_dataInicial = "20250221"
+    loop_dataFinal = "20250226"
+    loop_atual = loop_dataInicial
+    loop_status = True
+    loop_last_lap = False
+
+    print("\n")
+    while loop_status:
+        if loop_last_lap:
+            loop_status = False
+
+        api.dataInicial = loop_atual
+        api.dataFinal = loop_atual
+        consulta = api.consulta_contratacoes_puplicacao()
+
+        try:
+            print(f"{api.dataInicial} - {len(consulta['data'])}")
+        except:
+            print(f"{api.dataInicial} - {consulta}")
+
+        loop_atual = (
+            datetime.strptime(loop_atual, "%Y%m%d") + timedelta(days=1)
+        ).strftime("%Y%m%d")
+        if loop_atual == loop_dataFinal:
+            loop_last_lap = True
+        pass
+
+    pass
+
+
+def analise_entre_datas(codigoModalidadeContratacao):
+    api = font_api.Pncp()
+    api.pagina = 1
+    api.codigoModalidadeContratacao = codigoModalidadeContratacao
+    api.tamanhoPagina = 10
+    api.dataInicial = "20250101"
+    api.dataFinal = "20250226"
+
+    print("\n")
+    consulta = api.consulta_contratacoes_puplicacao()
+
+    # try:
+    #     print(f'{api.dataInicial} - {len(consulta['data'])}')
+    # except:
+    #     print(f'{api.dataInicial} - {consulta}')
+
+    primeiro = True
+    for registro in consulta["data"]:
+
+        if primeiro:
+            print(f"{registro['modalidadeId']}---{registro['modalidadeNome']}---")
+        primeiro = False
+    pass
 
 
 def alimentador_mongo():
@@ -28,7 +86,7 @@ def alimentador_mongo():
         api.codigoModalidadeContratacao = modalidade[0]
         api.pagina          = 1
         api.tamanhoPagina   = 50
-        api.dataInicial     = "20250101"
+        api.dataInicial     = "20240101"
         api.dataFinal       = "20251231"
 
 
@@ -55,22 +113,30 @@ def alimentador_mongo():
             while pagina_atual <= totalPaginas:
                 api.pagina = pagina_atual
                 consulta_in_loop = api.consulta_contratacoes_puplicacao()
-                agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                print('\n\n')
-                print(f"{agora} - Página {pagina_atual} de {totalPaginas} ")
+
                 for registro in consulta_in_loop['data']:
-                    print(".", end="")
+
                     # print(registro)
-                    db_mongo.pncp_bruto.insert_one(registro)
+                    # db_mongo.colecao.insert_one(registro)
+
                     pass
 
                 pagina_atual +=1
                 pass
+            
             pass
+
+
         pass
 
 
 
-if __name__ == '__main__':
-    
+if __name__ == "__main__":
+    # analise_dia_a_dia()
+    # atual = 0
+    # while True:
+    #     atual += 1
+    #     analise_entre_datas(atual)
+    # alimentador_mongo()
+
     pass
