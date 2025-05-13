@@ -9,15 +9,15 @@ def alimentador_bruto_mongo():
         # [1, "Leilão - Eletrônico"],
         # [2, "Diálogo Competitivo"],
         # [3, "Concurso"],
-        # [4, "Concorrência - Eletrônica"],
-        # [5, "Concorrência - Presencial"],
-        [6, "Pregão - Eletrônico"]
-        # [7, "Pregão - Presencial"],
-        # [8, "Dispensa"],
-        # [9, "Inexigibilidade"],
+        [4, "Concorrência - Eletrônica"],
+        [5, "Concorrência - Presencial"],
+        [6, "Pregão - Eletrônico"],
+        [7, "Pregão - Presencial"],
+        [8, "Dispensa"],
+        [9, "Inexigibilidade"],
         # [10, "Manifestação de Interesse"],
         # [11, "Pré-qualificação"],
-        # [12, "Credenciamento"],
+        [12, "Credenciamento"]
         # [13, "Leilão - Presencial"],
         # [14, "Inaplicabilidade da Licitação"],
     ]
@@ -84,7 +84,7 @@ def alimentador_final_mongo():
     # Itera sobre os registros retornados
     for registro in consulta:
         registro['interesse'] = 'Não Avaliado'  # Adiciona um campo de interesse
-        registro['anotacao'] = 'Sem Anotações'  # Adiciona um campo de anotações
+        registro['anotacao'] = 'whatsapp'  # Adiciona um campo de anotações
         
         db_mongo.pncp_final.insert_one(registro)  # Insere os registros no banco final
     pass

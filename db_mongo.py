@@ -35,9 +35,33 @@ def sintetiza_bruto():
     
     # Define o filtro para buscar apenas registros que contenham "software" no objeto de compra
     # e cuja data de encerramento da proposta seja futura.
+    # filtro = {
+    #     "objetoCompra": { 
+    #         "$regex": "(software)",  # Busca pelo termo "software" (case insensitive)
+    #         "$options": "i"
+    #     },
+    #     "dataEncerramentoProposta": { 
+    #         "$gt": agora  # Apenas propostas que ainda não encerraram
+    #     }
+    # }
+    
+    
+    #telemarketing
+    #teleatendimento
+    #telefonia
+    #webchat
+    #chatbot
+    #telefônico
+    #0800
+    #whatsapp
+    #
+    #
+    #
+    
+    
     filtro = {
         "objetoCompra": { 
-            "$regex": "(software)",  # Busca pelo termo "software" (case insensitive)
+            "$regex": "(whatsapp)",  # Busca pelo termo "software" (case insensitive)
             "$options": "i"
         },
         "dataEncerramentoProposta": { 
@@ -105,3 +129,4 @@ if __name__ == "__main__":
         print('\n')
         print(registro)
         print('\n')
+    print(len(consulta))
