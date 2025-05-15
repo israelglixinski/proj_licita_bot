@@ -89,7 +89,8 @@ def sintetiza_bruto():
 
 
 
-    consulta = pncp_bruto.find(filtro)
+    # consulta = pncp_bruto.find(filtro)
+    consulta = pncp_bruto.find()
     
     # Lista onde serão armazenados os registros formatados
     list_registros = []
