@@ -27,5 +27,5 @@ volumes:
   mongo_data:
 
 networks:
-  rede_composta:
+  rede_licita:
     driver: bridge
