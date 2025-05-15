@@ -49,7 +49,7 @@ def alimentador_bruto_mongo():
         # api.dataInicial = "20250101"  # Define a data inicial para consulta
         # api.dataFinal = "20251231"  # Define a data final para consulta
         api.dataInicial = "20250301"  # Define a data inicial para consulta
-        api.dataFinal = "20250305"  # Define a data final para consulta
+        api.dataFinal = "20250301"  # Define a data final para consulta
 
         # Realiza a consulta inicial na API
         consulta_inicial = api.consulta_contratacoes_puplicacao()
