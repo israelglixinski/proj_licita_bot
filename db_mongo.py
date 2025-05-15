@@ -98,6 +98,8 @@ def sintetiza_bruto():
     # Processa os documentos retornados na consulta
     for documento in consulta:
 
+        print(documento)
+
         # documento['valorTotalEstimado']         = locale.currency(documento['valorTotalEstimado'], grouping=True, symbol="R$ ")
         # documento['dataEncerramentoProposta']   = str(documento['dataEncerramentoProposta']).replace('T',' ')
 
@@ -129,9 +131,14 @@ def sintetiza_bruto():
 
 if __name__ == "__main__":
     # Chama a função de consulta e exibe os resultados
-    consulta = sintetiza_bruto()
-    for registro in consulta:
-        print('\n')
-        print(registro)
-        print('\n')
-    print(len(consulta))
+    # consulta = sintetiza_bruto()
+    # for registro in consulta:
+    #     print('\n')
+    #     print(registro)
+    #     print('\n')
+    # print(len(consulta))
+
+
+
+    # pncp_bruto.delete_one({"numeroControlePNCP": "01610566000106-1-000014/2025"})
+    pass

@@ -49,7 +49,7 @@ def alimentador_bruto_mongo():
         # api.dataInicial = "20250101"  # Define a data inicial para consulta
         # api.dataFinal = "20251231"  # Define a data final para consulta
         api.dataInicial = "20250301"  # Define a data inicial para consulta
-        api.dataFinal = "20250315"  # Define a data final para consulta
+        api.dataFinal = "20250305"  # Define a data final para consulta
 
         # Realiza a consulta inicial na API
         consulta_inicial = api.consulta_contratacoes_puplicacao()
@@ -86,10 +86,18 @@ def alimentador_bruto_mongo():
                 
                 # Itera sobre os registros da página atual
                 for registro in consulta_in_loop['data']:
-                    # print(".", end="")
-                    # print(registro)
-                    db_mongo.pncp_bruto.insert_one(registro)
-                    pass
+                    numero_controle = registro.get("numeroControlePNCP")
+                    if not numero_controle:
+                        print("Registro sem numeroControlePNCP, ignorado.")
+                        continue
+
+                    existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
+                    
+                    if existe:
+                        print(f"Já existe no banco: {numero_controle}")
+                    else:
+                        db_mongo.pncp_bruto.insert_one(registro)
+                        print(f"Inserido novo registro: {numero_controle}")
 
                 pagina_atual += 1  # Incrementa o contador da página
                 pass
