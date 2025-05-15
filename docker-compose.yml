@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  robo_python:
+    build: ./robo  # pasta onde está o Dockerfile do robô
+    container_name: robo_python
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/meubanco
+    volumes:
+      - ./robo:/app
+    networks:
+      - rede_composta
+
+  mongo:
+    image: mongo:6
+    container_name: mongo_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - rede_composta
+
+volumes:
+  mongo_data:
+
+networks:
+  rede_composta:
+    driver: bridge
