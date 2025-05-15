@@ -3,7 +3,7 @@ version: '3.8'
 services:
   robo_python:
     build: ./robo  # pasta onde está o Dockerfile do robô
-    container_name: robo_python
+    container_name: robo_licita
     depends_on:
       - mongo
     environment:
@@ -11,17 +11,17 @@ services:
     volumes:
       - ./robo:/app
     networks:
-      - rede_composta
+      - rede_licita
 
   mongo:
     image: mongo:6
-    container_name: mongo_container
+    container_name: mongo_licita
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
     networks:
-      - rede_composta
+      - rede_licita
 
 volumes:
   mongo_data:
