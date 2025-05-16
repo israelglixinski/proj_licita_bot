@@ -135,10 +135,10 @@ def alimentador_bruto_mongo():
                         existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
                         
                         if existe:
-                            registrando(f"Já existe no banco: {numero_controle}")
+                            registrando(f"{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
                         else:
                             db_mongo.pncp_bruto.insert_one(registro)
-                            registrando(f"Inserido novo registro: {numero_controle}")
+                            registrando(f"{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
 
                     pagina_atual += 1  # Incrementa o contador da página
                     pass
