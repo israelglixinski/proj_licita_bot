@@ -3,6 +3,16 @@ import font_api  # Importa o módulo que interage com a API de fontes de dados
 import db_mongo  # Importa o módulo para interação com o MongoDB
 
 
+def registrando(texto):
+    arquivo = open('log.txt','a')
+    agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    mensagem = f"""{agora} - {texto}"""
+    print(mensagem,file=arquivo)
+    print(mensagem)
+    arquivo.close()
+    pass
+
+
 def alimentador_bruto_mongo():
     # # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
     # lista_ModalidadeContratacao = [
@@ -41,68 +51,102 @@ def alimentador_bruto_mongo():
 
     api = font_api.Pncp()
 
-    # Itera sobre cada modalidade de contratação na lista
-    for modalidade in lista_ModalidadeContratacao:
-        api.codigoModalidadeContratacao = modalidade[0]  # Define o código da modalidade
-        api.pagina = 1  # Define a página inicial da API
-        api.tamanhoPagina = 50  # Define o número de registros por página
-        # api.dataInicial = "20250101"  # Define a data inicial para consulta
-        # api.dataFinal = "20251231"  # Define a data final para consulta
-        api.dataInicial = "20250301"  # Define a data inicial para consulta
-        api.dataFinal = "20250301"  # Define a data final para consulta
 
-        # Realiza a consulta inicial na API
-        consulta_inicial = api.consulta_contratacoes_puplicacao()
-     
-        # Trata possíveis exceções ao tentar acessar os dados da API
-        try:
-            totalRegistros = consulta_inicial["totalRegistros"]  # Total de registros retornados
-            totalPaginas = consulta_inicial["totalPaginas"]  # Total de páginas na consulta
-            numeroPagina = consulta_inicial["numeroPagina"]  # Número da página atual
-            paginasRestantes = consulta_inicial["paginasRestantes"]  # Páginas restantes
-        except:
-            # Caso ocorra um erro, define valores padrão como zero
-            totalRegistros = 0
-            totalPaginas = 0
-            numeroPagina = 0
-            paginasRestantes = 0
 
-        # Exibe no console informações sobre a consulta inicial
-        print(' \n ')
-        print(f'modalidade       - {modalidade}')
-        print(f'totalRegistros   - {totalRegistros}')
-        print(f'totalPaginas     - {totalPaginas}')
 
-        # Caso existam registros a serem processados
-        if totalRegistros > 0:
-            pagina_atual = 1
-            # Itera sobre todas as páginas disponíveis
-            while pagina_atual <= totalPaginas:
-                api.pagina = pagina_atual  # Define a página atual na API
-                consulta_in_loop = api.consulta_contratacoes_puplicacao()  # Realiza nova consulta
-                agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Obtém o timestamp atual
-                # print('\n\n')
-                print(f"{agora} - Página {pagina_atual} de {totalPaginas} ")  # Exibe progresso
-                
-                # Itera sobre os registros da página atual
-                for registro in consulta_in_loop['data']:
-                    numero_controle = registro.get("numeroControlePNCP")
-                    if not numero_controle:
-                        print("Registro sem numeroControlePNCP, ignorado.")
-                        continue
+    list_datas = [
+         "20250501"
+        ,"20250502"
+        ,"20250503"
+        ,"20250504"
+        ,"20250505"
+        ,"20250506"
+        ,"20250507"
+        ,"20250508"
+        ,"20250509"
+        ,"20250510"
+        ,"20250511"
+        ,"20250512"
+        ,"20250513"
+        ,"20250514"
+        ,"20250515"
+        ,"20250516"
+        ,"20250517"
+        ,"20250518"
+        ,"20250519"
+        ,"20250520"
+        ]
 
-                    existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
+
+    for data_process in list_datas:
+
+        registrando(f'trabalhando na data {data_process}')
+
+        # Itera sobre cada modalidade de contratação na lista
+        for modalidade in lista_ModalidadeContratacao:
+            api.codigoModalidadeContratacao = modalidade[0]  # Define o código da modalidade
+            api.pagina = 1  # Define a página inicial da API
+            api.tamanhoPagina = 50  # Define o número de registros por página
+            # api.dataInicial = "20250101"  # Define a data inicial para consulta
+            # api.dataFinal = "20251231"  # Define a data final para consulta
+            api.dataInicial = data_process  # Define a data inicial para consulta
+            api.dataFinal   = data_process  # Define a data final para consulta
+
+            # Realiza a consulta inicial na API
+            consulta_inicial = api.consulta_contratacoes_puplicacao()
+        
+            # Trata possíveis exceções ao tentar acessar os dados da API
+            try:
+                totalRegistros = consulta_inicial["totalRegistros"]  # Total de registros retornados
+                totalPaginas = consulta_inicial["totalPaginas"]  # Total de páginas na consulta
+                numeroPagina = consulta_inicial["numeroPagina"]  # Número da página atual
+                paginasRestantes = consulta_inicial["paginasRestantes"]  # Páginas restantes
+            except:
+                # Caso ocorra um erro, define valores padrão como zero
+                totalRegistros = 0
+                totalPaginas = 0
+                numeroPagina = 0
+                paginasRestantes = 0
+
+            # Exibe no console informações sobre a consulta inicial
+            registrando(' \n ')
+            registrando(f'modalidade       - {modalidade}')
+            registrando(f'totalRegistros   - {totalRegistros}')
+            registrando(f'totalPaginas     - {totalPaginas}')
+
+            # Caso existam registros a serem processados
+            if totalRegistros > 0:
+                pagina_atual = 1
+                # Itera sobre todas as páginas disponíveis
+                while pagina_atual <= totalPaginas:
+                    api.pagina = pagina_atual  # Define a página atual na API
+                    consulta_in_loop = api.consulta_contratacoes_puplicacao()  # Realiza nova consulta
+                    agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Obtém o timestamp atual
+                    # print('\n\n')
+                    registrando(f"{agora} - Página {pagina_atual} de {totalPaginas} ")  # Exibe progresso
                     
-                    if existe:
-                        print(f"Já existe no banco: {numero_controle}")
-                    else:
-                        db_mongo.pncp_bruto.insert_one(registro)
-                        print(f"Inserido novo registro: {numero_controle}")
+                    # Itera sobre os registros da página atual
+                    for registro in consulta_in_loop['data']:
+                        numero_controle = registro.get("numeroControlePNCP")
+                        if not numero_controle:
+                            registrando("Registro sem numeroControlePNCP, ignorado.")
+                            continue
 
-                pagina_atual += 1  # Incrementa o contador da página
+                        existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
+                        
+                        if existe:
+                            registrando(f"Já existe no banco: {numero_controle}")
+                        else:
+                            db_mongo.pncp_bruto.insert_one(registro)
+                            registrando(f"Inserido novo registro: {numero_controle}")
+
+                    pagina_atual += 1  # Incrementa o contador da página
+                    pass
                 pass
             pass
-        pass
+
+
+
 
 def alimentador_final_mongo():
     # Obtém os registros processados do banco MongoDB

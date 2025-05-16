@@ -139,16 +139,16 @@ if __name__ == "__main__":
     # print(len(consulta))
 
 
-    consulta = pncp_bruto.find()
-    for registro in consulta: 
-        print('\n')
-        print(f"'dataAberturaProposta'      - {registro['dataAberturaProposta'      ]}")
-        print(f"'dataEncerramentoProposta'  - {registro['dataEncerramentoProposta'  ]}")
-        print(f"'dataInclusao'              - {registro['dataInclusao'              ]}")
-        print(f"'dataPublicacaoPncp'        - {registro['dataPublicacaoPncp'        ]}")
-        print(f"'dataAtualizacao'           - {registro['dataAtualizacao'           ]}")
-        print(f"'dataAtualizacaoGlobal'     - {registro['dataAtualizacaoGlobal'     ]}")
-        print('\n')
+    # consulta = pncp_bruto.find()
+    # for registro in consulta: 
+    #     print('\n')
+    #     print(f"'dataAberturaProposta'      - {registro['dataAberturaProposta'      ]}")
+    #     print(f"'dataEncerramentoProposta'  - {registro['dataEncerramentoProposta'  ]}")
+    #     print(f"'dataInclusao'              - {registro['dataInclusao'              ]}")
+    #     print(f"'dataPublicacaoPncp'        - {registro['dataPublicacaoPncp'        ]}")
+    #     print(f"'dataAtualizacao'           - {registro['dataAtualizacao'           ]}")
+    #     print(f"'dataAtualizacaoGlobal'     - {registro['dataAtualizacaoGlobal'     ]}")
+    #     print('\n')
 
 
     # pncp_bruto.delete_many({})
