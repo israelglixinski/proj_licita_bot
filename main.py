@@ -14,40 +14,42 @@ def registrando(texto):
 
 
 def alimentador_bruto_mongo():
-    # # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
-    # lista_ModalidadeContratacao = [
-    #     # [1, "Leilão - Eletrônico"],
-    #     # [2, "Diálogo Competitivo"],
-    #     # [3, "Concurso"],
-    #     [4, "Concorrência - Eletrônica"],
-    #     [5, "Concorrência - Presencial"],
-    #     [6, "Pregão - Eletrônico"],
-    #     [7, "Pregão - Presencial"],
-    #     [8, "Dispensa"],
-    #     [9, "Inexigibilidade"],
-    #     # [10, "Manifestação de Interesse"],
-    #     # [11, "Pré-qualificação"],
-    #     [12, "Credenciamento"]
-    #     # [13, "Leilão - Presencial"],
-    #     # [14, "Inaplicabilidade da Licitação"],
-    # ]
     # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
     lista_ModalidadeContratacao = [
         # [1, "Leilão - Eletrônico"],
         # [2, "Diálogo Competitivo"],
         # [3, "Concurso"],
-        # [4, "Concorrência - Eletrônica"],
-        # [5, "Concorrência - Presencial"],
+        [4, "Concorrência - Eletrônica"],
+        [5, "Concorrência - Presencial"],
         [6, "Pregão - Eletrônico"],
-        # [7, "Pregão - Presencial"],
-        # [8, "Dispensa"],
-        # [9, "Inexigibilidade"],
+        [7, "Pregão - Presencial"],
+        [8, "Dispensa"],
+        [9, "Inexigibilidade"],
         # [10, "Manifestação de Interesse"],
         # [11, "Pré-qualificação"],
-        # [12, "Credenciamento"]
+        [12, "Credenciamento"]
         # [13, "Leilão - Presencial"],
         # [14, "Inaplicabilidade da Licitação"],
     ]
+    
+    
+    # # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
+    # lista_ModalidadeContratacao = [
+    #     # [1, "Leilão - Eletrônico"],
+    #     # [2, "Diálogo Competitivo"],
+    #     # [3, "Concurso"],
+    #     # [4, "Concorrência - Eletrônica"],
+    #     # [5, "Concorrência - Presencial"],
+    #     [6, "Pregão - Eletrônico"],
+    #     # [7, "Pregão - Presencial"],
+    #     # [8, "Dispensa"],
+    #     # [9, "Inexigibilidade"],
+    #     # [10, "Manifestação de Interesse"],
+    #     # [11, "Pré-qualificação"],
+    #     # [12, "Credenciamento"]
+    #     # [13, "Leilão - Presencial"],
+    #     # [14, "Inaplicabilidade da Licitação"],
+    # ]
 
     api = font_api.Pncp()
 
@@ -55,17 +57,17 @@ def alimentador_bruto_mongo():
 
 
     list_datas = [
-         "20250501"
-        ,"20250502"
-        ,"20250503"
-        ,"20250504"
-        ,"20250505"
-        ,"20250506"
-        ,"20250507"
-        ,"20250508"
-        ,"20250509"
-        ,"20250510"
-        ,"20250511"
+        #  "20250501"
+        # ,"20250502"
+        # ,"20250503"
+        # ,"20250504"
+        # ,"20250505"
+        # ,"20250506"
+        # ,"20250507"
+        # ,"20250508"
+        # ,"20250509"
+        # ,"20250510"
+         "20250511"
         ,"20250512"
         ,"20250513"
         ,"20250514"
@@ -85,6 +87,7 @@ def alimentador_bruto_mongo():
         # Itera sobre cada modalidade de contratação na lista
         for modalidade in lista_ModalidadeContratacao:
             api.codigoModalidadeContratacao = modalidade[0]  # Define o código da modalidade
+            desc_modalidade = modalidade[1]  # Define o código da modalidade
             api.pagina = 1  # Define a página inicial da API
             api.tamanhoPagina = 50  # Define o número de registros por página
             # api.dataInicial = "20250101"  # Define a data inicial para consulta
@@ -135,10 +138,10 @@ def alimentador_bruto_mongo():
                         existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
                         
                         if existe:
-                            registrando(f"{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
+                            registrando(f"{data_process}-{desc_modalidade}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
                         else:
                             db_mongo.pncp_bruto.insert_one(registro)
-                            registrando(f"{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
+                            registrando(f"{data_process}-{desc_modalidade}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
 
                     pagina_atual += 1  # Incrementa o contador da página
                     pass
