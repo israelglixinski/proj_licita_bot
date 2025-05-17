@@ -112,10 +112,15 @@ def alimentador_bruto_mongo():
                 paginasRestantes = 0
 
             # Exibe no console informações sobre a consulta inicial
-            registrando(' \n ')
-            registrando(f'modalidade       - {modalidade}')
-            registrando(f'totalRegistros   - {totalRegistros}')
-            registrando(f'totalPaginas     - {totalPaginas}')
+            # registrando(' \n ')
+            # registrando(f'modalidade       - {modalidade}')
+            # registrando(f'totalRegistros   - {totalRegistros}')
+            # registrando(f'totalPaginas     - {totalPaginas}')
+
+            registrando(f'PONTO DE MARCACAO / modalidade - {modalidade} / Data - {data_process} / totalPaginas - {totalPaginas} / totalRegistros - {totalRegistros}')
+
+
+
 
             # Caso existam registros a serem processados
             if totalRegistros > 0:
