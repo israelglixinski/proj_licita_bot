@@ -1,6 +1,7 @@
 from datetime import datetime
 import font_api  # Importa o módulo que interage com a API de fontes de dados
-import db_mongo  # Importa o módulo para interação com o MongoDB
+import db_mongo_local  # Importa o módulo para interação com o MongoDB
+import db_mongo_nuvem  # Importa o módulo para interação com o MongoDB
 
 
 def registrando(texto):
@@ -143,12 +144,12 @@ def alimentador_bruto_mongo():
                                     registrando("Registro sem numeroControlePNCP, ignorado.")
                                     continue
 
-                                existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
+                                existe = db_mongo_local.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
                                 
                                 if existe:
                                     registrando(f"{desc_modalidade}-{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
                                 else:
-                                    db_mongo.pncp_bruto.insert_one(registro)
+                                    db_mongo_local.pncp_bruto.insert_one(registro)
                                     registrando(f"{desc_modalidade}-{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
                             tentativa = False
                             
@@ -166,19 +167,37 @@ def alimentador_bruto_mongo():
 
 def alimentador_final_mongo():
     # Obtém os registros processados do banco MongoDB
-    consulta = db_mongo.sintetiza_bruto()
+
+    lista_termos = [    
+    'telemarketing'
+    ,'teleatendimento'
+    ,'telefonia'
+    ,'webchat'
+    ,'chatbot'
+    ,'telefônico'
+    ,'0800'
+    ,'whatsapp'
+    ,'software'    
+    ,'python'    
+    ]
     
-    # Itera sobre os registros retornados
-    for registro in consulta:
-        registro['interesse'] = 'Não Avaliado'  # Adiciona um campo de interesse
-        registro['anotacao'] = 'whatsapp'  # Adiciona um campo de anotações
-        
-        db_mongo.pncp_final.insert_one(registro)  # Insere os registros no banco final
-    pass
+    for termo in lista_termos:
+
+        consulta = db_mongo_local.sintetiza_bruto(termo)
+
+        registrando(f"FINAL - {termo} - {len(consulta)}")
+
+        # Itera sobre os registros retornados
+        for registro in consulta:
+            registro['interesse'] = 'Não Avaliado'  # Adiciona um campo de interesse
+            registro['anotacao'] = termo  # Adiciona um campo de anotações
+            
+            db_mongo_nuvem.pncp_final.insert_one(registro)  # Insere os registros no banco final
+        pass
 
 
 if __name__ == '__main__':
     # Executa apenas a função alimentador_final_mongo(), a outra está comentada
-    alimentador_bruto_mongo()
-    # alimentador_final_mongo()
+    # alimentador_bruto_mongo()
+    alimentador_final_mongo()
     pass

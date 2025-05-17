@@ -1,6 +1,6 @@
 from datetime import datetime
 import font_api  # Importa o módulo que interage com a API de fontes de dados
-import db_mongo  # Importa o módulo para interação com o MongoDB
+import db_mongo_local  # Importa o módulo para interação com o MongoDB
 
 
 def alimentador_bruto_mongo():
@@ -69,7 +69,7 @@ def alimentador_bruto_mongo():
                 for registro in consulta_in_loop['data']:
                     # print(".", end="")
                     # print(registro)
-                    db_mongo.pncp_bruto.insert_one(registro)
+                    db_mongo_local.pncp_bruto.insert_one(registro)
                     pass
 
                 pagina_atual += 1  # Incrementa o contador da página
@@ -79,14 +79,14 @@ def alimentador_bruto_mongo():
 
 def alimentador_final_mongo():
     # Obtém os registros processados do banco MongoDB
-    consulta = db_mongo.sintetiza_bruto()
+    consulta = db_mongo_local.sintetiza_bruto()
     
     # Itera sobre os registros retornados
     for registro in consulta:
         registro['interesse'] = 'Não Avaliado'  # Adiciona um campo de interesse
         registro['anotacao'] = 'whatsapp'  # Adiciona um campo de anotações
         
-        db_mongo.pncp_final.insert_one(registro)  # Insere os registros no banco final
+        db_mongo_local.pncp_final.insert_one(registro)  # Insere os registros no banco final
     pass
 
 
