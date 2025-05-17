@@ -80,12 +80,12 @@ def alimentador_bruto_mongo():
         ]
 
 
-    for data_process in list_datas:
-
-        registrando(f'trabalhando na data {data_process}')
+    for modalidade in lista_ModalidadeContratacao:
+        registrando(f'trabalhando na modalidade {modalidade}')
 
         # Itera sobre cada modalidade de contratação na lista
-        for modalidade in lista_ModalidadeContratacao:
+        for data_process in list_datas:
+            registrando(f'trabalhando na data {data_process}')
             api.codigoModalidadeContratacao = modalidade[0]  # Define o código da modalidade
             desc_modalidade = modalidade[1]  # Define o código da modalidade
             api.pagina = 1  # Define a página inicial da API
@@ -122,26 +122,34 @@ def alimentador_bruto_mongo():
                 pagina_atual = 1
                 # Itera sobre todas as páginas disponíveis
                 while pagina_atual <= totalPaginas:
-                    api.pagina = pagina_atual  # Define a página atual na API
-                    consulta_in_loop = api.consulta_contratacoes_puplicacao()  # Realiza nova consulta
-                    agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Obtém o timestamp atual
-                    # print('\n\n')
-                    registrando(f"{agora} - Página {pagina_atual} de {totalPaginas} ")  # Exibe progresso
-                    
-                    # Itera sobre os registros da página atual
-                    for registro in consulta_in_loop['data']:
-                        numero_controle = registro.get("numeroControlePNCP")
-                        if not numero_controle:
-                            registrando("Registro sem numeroControlePNCP, ignorado.")
-                            continue
+                    tentativa = True
+                    while tentativa:
+                        try:
+                            api.pagina = pagina_atual  # Define a página atual na API
+                            consulta_in_loop = api.consulta_contratacoes_puplicacao()  # Realiza nova consulta
+                            agora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Obtém o timestamp atual
+                            # print('\n\n')
+                            registrando(f"{agora} - Página {pagina_atual} de {totalPaginas} ")  # Exibe progresso
+                            
+                            # Itera sobre os registros da página atual
+                            for registro in consulta_in_loop['data']:
+                                numero_controle = registro.get("numeroControlePNCP")
+                                if not numero_controle:
+                                    registrando("Registro sem numeroControlePNCP, ignorado.")
+                                    continue
 
-                        existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
-                        
-                        if existe:
-                            registrando(f"{data_process}-{desc_modalidade}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
-                        else:
-                            db_mongo.pncp_bruto.insert_one(registro)
-                            registrando(f"{data_process}-{desc_modalidade}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
+                                existe = db_mongo.pncp_bruto.find_one({"numeroControlePNCP": numero_controle})
+                                
+                                if existe:
+                                    registrando(f"{desc_modalidade}-{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Já existe no banco: {numero_controle}")
+                                else:
+                                    db_mongo.pncp_bruto.insert_one(registro)
+                                    registrando(f"{desc_modalidade}-{data_process}-{totalRegistros}-{pagina_atual}/{totalPaginas} - Inserido novo registro: {numero_controle}")
+                            tentativa = False
+                            
+                        except:
+                            tentativa = True
+                        registrando(f"Tentativa = {tentativa}")
 
                     pagina_atual += 1  # Incrementa o contador da página
                     pass

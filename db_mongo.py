@@ -13,7 +13,7 @@ import os
 # Configura a conexão com o MongoDB usando a senha carregada
 # client = MongoClient(f"mongodb+srv://israelglixinski:{mongopass}@cluster0.kzkzrs2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 
-mongo_url = os.getenv("MONGO_URL", "mongodb://172.32.1.73:27017/meubanco")
+mongo_url = os.getenv("MONGO_URL", "mongodb://localhost:27017/meubanco")
 client = MongoClient(mongo_url)
 
 
