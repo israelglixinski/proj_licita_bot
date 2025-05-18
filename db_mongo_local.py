@@ -151,6 +151,10 @@ if __name__ == "__main__":
     #     print('\n')
 
 
+    consulta = pncp_bruto.find({"numeroControlePNCP":"31752645000104-1-000023/2025"})
+    for registro in consulta:
+        print(registro)
+
     # pncp_bruto.delete_many({})
     # pncp_bruto.delete_one({"numeroControlePNCP": "01610566000106-1-000014/2025"})
     pass

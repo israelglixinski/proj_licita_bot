@@ -16,41 +16,36 @@ def registrando(texto):
 
 def alimentador_bruto_mongo():
     # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
+    # lista_ModalidadeContratacao = [
+    #     # [1, "Leilão - Eletrônico"],
+    #     # [2, "Diálogo Competitivo"],
+    #     # [3, "Concurso"],
+    #     [4, "Concorrência - Eletrônica"],
+    #     [5, "Concorrência - Presencial"],
+    #     [6, "Pregão - Eletrônico"],
+    #     [7, "Pregão - Presencial"],
+    #     [8, "Dispensa"],
+    #     [9, "Inexigibilidade"],
+    #     # [10, "Manifestação de Interesse"],
+    #     # [11, "Pré-qualificação"],
+    #     [12, "Credenciamento"]
+    #     # [13, "Leilão - Presencial"],
+    #     # [14, "Inaplicabilidade da Licitação"],
+    # ]
+
+    # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
     lista_ModalidadeContratacao = [
-        # [1, "Leilão - Eletrônico"],
-        # [2, "Diálogo Competitivo"],
-        # [3, "Concurso"],
         [4, "Concorrência - Eletrônica"],
         [5, "Concorrência - Presencial"],
         [6, "Pregão - Eletrônico"],
         [7, "Pregão - Presencial"],
         [8, "Dispensa"],
         [9, "Inexigibilidade"],
-        # [10, "Manifestação de Interesse"],
-        # [11, "Pré-qualificação"],
         [12, "Credenciamento"]
-        # [13, "Leilão - Presencial"],
-        # [14, "Inaplicabilidade da Licitação"],
     ]
     
     
-    # # Lista contendo modalidades de contratação (somente "Pregão - Eletrônico" está ativado)
-    # lista_ModalidadeContratacao = [
-    #     # [1, "Leilão - Eletrônico"],
-    #     # [2, "Diálogo Competitivo"],
-    #     # [3, "Concurso"],
-    #     # [4, "Concorrência - Eletrônica"],
-    #     # [5, "Concorrência - Presencial"],
-    #     [6, "Pregão - Eletrônico"],
-    #     # [7, "Pregão - Presencial"],
-    #     # [8, "Dispensa"],
-    #     # [9, "Inexigibilidade"],
-    #     # [10, "Manifestação de Interesse"],
-    #     # [11, "Pré-qualificação"],
-    #     # [12, "Credenciamento"]
-    #     # [13, "Leilão - Presencial"],
-    #     # [14, "Inaplicabilidade da Licitação"],
-    # ]
+  
 
     api = font_api.Pncp()
 
@@ -58,17 +53,17 @@ def alimentador_bruto_mongo():
 
 
     list_datas = [
-        #  "20250501"
-        # ,"20250502"
-        # ,"20250503"
-        # ,"20250504"
-        # ,"20250505"
-        # ,"20250506"
-        # ,"20250507"
-        # ,"20250508"
-        # ,"20250509"
-        # ,"20250510"
-         "20250511"
+         "20250501"
+        ,"20250502"
+        ,"20250503"
+        ,"20250504"
+        ,"20250505"
+        ,"20250506"
+        ,"20250507"
+        ,"20250508"
+        ,"20250509"
+        ,"20250510"
+        ,"20250511"
         ,"20250512"
         ,"20250513"
         ,"20250514"
@@ -168,6 +163,8 @@ def alimentador_bruto_mongo():
 def alimentador_final_mongo():
     # Obtém os registros processados do banco MongoDB
 
+    agora = datetime.now().strftime("%Y-%m-%d")
+
     lista_termos = [    
     'telemarketing'
     ,'teleatendimento'
@@ -190,14 +187,25 @@ def alimentador_final_mongo():
         # Itera sobre os registros retornados
         for registro in consulta:
             registro['interesse'] = 'Não Avaliado'  # Adiciona um campo de interesse
-            registro['anotacao'] = termo  # Adiciona um campo de anotações
+            registro['anotacao'] = f"{termo} {agora}"  # Adiciona um campo de anotações
             
-            db_mongo_nuvem.pncp_final.insert_one(registro)  # Insere os registros no banco final
+
+            existe = db_mongo_nuvem.pncp_final.find_one({"link": registro["link"]})
+            
+            if existe:
+                registrando(f"ALIMENTA_FINAL-{termo}-{registro["dataEncerramentoProposta"]}-Já existe no banco: {registro["link"]}")
+            else:
+                db_mongo_nuvem.pncp_final.insert_one(registro)  # Insere os registros no banco final
+                registrando(f"ALIMENTA_FINAL-{termo}-{registro["dataEncerramentoProposta"]}-Inserido novo registro: {registro["link"]}")
+
+
+
+
         pass
 
 
 if __name__ == '__main__':
     # Executa apenas a função alimentador_final_mongo(), a outra está comentada
-    # alimentador_bruto_mongo()
-    alimentador_final_mongo()
+    alimentador_bruto_mongo()
+    # alimentador_final_mongo()
     pass
