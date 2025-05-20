@@ -206,6 +206,6 @@ def alimentador_final_mongo():
 
 if __name__ == '__main__':
     # Executa apenas a função alimentador_final_mongo(), a outra está comentada
-    alimentador_bruto_mongo()
-    # alimentador_final_mongo()
+    # alimentador_bruto_mongo()
+    alimentador_final_mongo()
     pass
